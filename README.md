@@ -48,7 +48,7 @@ $ brew install packer
 `packer/iso`にisoファイルを配置し、packerのテンプレート内の`iso_path`にpathを記載するとダウンロードを省略可能。
 
 ```bash
-$ cd packer/centos
+$ cd packer
 $ packer build centos67.json # CentOS 6.7
 ```
 
