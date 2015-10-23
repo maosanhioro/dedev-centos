@@ -1,0 +1,22 @@
+- name: インストール
+  yum:
+    name={{ item }}
+    state=present
+  with_items:
+    - ntp
+    - time
+
+- name: 設定ファイルを配置
+  copy:
+    src=ntp.conf
+    dest=/etc/ntp.conf
+    mode=644
+    backup=yes
+
+- name: サービス登録・起動
+  service:
+    name=ntpd
+    state=started
+    enabled=yes
+  notify:
+    - restart-ntpd

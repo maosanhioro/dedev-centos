@@ -1,0 +1,18 @@
+---
+- name: composer | インストール
+  shell:
+    /usr/bin/curl -sS https://getcomposer.org/installer | /usr/bin/php -- --install-dir=/usr/local/bin
+  tags:
+    - composer
+
+- name: composer | リネーム
+  command:
+    /bin/mv /usr/local/bin/composer.phar /usr/local/bin/composer
+  tags:
+    - composer
+
+- name: composer | self-update
+  command:
+    /usr/local/bin/composer self-update
+  tags:
+    - composer

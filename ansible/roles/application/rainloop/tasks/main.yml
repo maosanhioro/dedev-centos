@@ -1,0 +1,19 @@
+---
+- name: インストール
+  shell:
+    /usr/bin/curl -s http://repository.rainloop.net/installer.php | /usr/bin/php
+    chdir=/var/www/rainloop.vm
+  ignore_errors: True
+  tags:
+    - rainloop
+
+- name: Permission変更
+  file:
+    state=directory
+    path=/var/www/rainloop.vm
+    mode=755
+    owner=apache
+    group=apache
+    recurse=yes
+  tags:
+    - rainloop

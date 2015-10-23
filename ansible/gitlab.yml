@@ -1,0 +1,11 @@
+---
+- name: Gitlab構築
+  gather_facts: no
+  hosts: vagrant
+  sudo: yes
+
+  roles:
+    - common
+    - common/user
+    - middleware/ntp
+    - application/gitlab

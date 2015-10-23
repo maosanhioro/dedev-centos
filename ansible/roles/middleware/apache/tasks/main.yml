@@ -1,0 +1,38 @@
+---
+- name: インストール
+  yum:
+    name={{ item }}
+    state=present
+  with_items:
+    - httpd
+    - ImageMagick
+  tags:
+    - apache
+
+- name: EnableMMAP/EnableSendfileの無効化、mod_rewriteの有効化
+  replace:
+    regexp="{{ item.regexp }}"
+    replace="{{ item.replace }}"
+    dest=/etc/httpd/conf/httpd.conf
+    backup=yes
+  with_items:
+    - { regexp: '^#EnableMMAP off', replace: 'EnableMMAP off' }
+    - { regexp: '^#EnableSendfile off', replace: 'EnableSendfile off' }
+    - { regexp: '^    AllowOverride None', replace: '    AllowOverride All' }
+  notify:
+    - restart-httpd
+  tags:
+    - apache
+
+- name: サービス登録・起動
+  service:
+    name=httpd
+    state=started
+    enabled=yes
+  notify:
+    - restart-httpd
+  tags:
+    - apache
+
+- include: userdir.yml
+- include: vhost.yml

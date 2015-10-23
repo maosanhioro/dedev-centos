@@ -1,0 +1,47 @@
+---
+- name: インストール
+  yum:
+    name={{ item }}
+    state=present
+  with_items:
+    - mail
+    - postfix
+  tags:
+    - postfix
+
+- name: aliases.regexp配置
+  copy:
+    src=aliases.regexp
+    dest=/etc/aliases.regexp
+    mode=644
+    backup=yes
+  tags:
+    - postfix
+
+- name: main.cf配置
+  copy:
+    src=main.cf
+    dest=/etc/postfix/main.cf
+    mode=644
+    backup=yes
+  tags:
+    - postfix
+
+- name: transport_maps配置
+  copy:
+    src=transport_maps
+    dest=/etc/postfix/transport_maps
+    mode=644
+    backup=yes
+  tags:
+    - postfix
+
+- name: サービス登録・起動
+  service:
+    name=postfix
+    state=started
+    enabled=yes
+  notify:
+    - restart-postfix
+  tags:
+    - postfix

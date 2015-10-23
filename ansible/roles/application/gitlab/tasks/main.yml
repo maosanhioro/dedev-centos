@@ -1,0 +1,43 @@
+---
+- name: インストール
+  yum:
+    name={{ item }}
+    enablerepo=remi
+    state=latest
+  with_items:
+    - openssh-server
+    - postfix
+    - cronie
+  tags:
+    - gitlab
+
+- name: サービス登録・起動
+  service:
+    name=postfix
+    state=started
+    enabled=yes
+  notify:
+    - restart-postfix
+  tags:
+    - gitlab
+
+- name: gitlab repository インストール
+  shell:
+    /usr/bin/curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo /bin/bash
+  tags:
+    - gitlab
+
+- name: gitlab-ce インストール
+  yum:
+    name=gitlab-ce
+    enablerepo=remi
+    state=latest
+  tags:
+    - gitlab
+
+- name: 設定＆起動
+  command:
+    /usr/bin/gitlab-ctl reconfigure
+  tags:
+    - gitlab
+    - gitlab-ctl

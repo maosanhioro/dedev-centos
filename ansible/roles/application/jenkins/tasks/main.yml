@@ -1,0 +1,28 @@
+---
+- name: リポジトリ取得
+  get_url:
+    url=http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+    dest=/etc/yum.repos.d/jenkins.repo
+  tags:
+    - jenkins
+
+- name: リポジトリ追加
+  rpm_key:
+    key=http://pkg.jenkins-ci.org/redhat-stable/jenkins-ci.org.key
+  tags:
+    - jenkins
+
+- name: インストール
+  yum:
+    name=jenkins
+    state=latest
+  tags:
+    - jenkins
+
+- name: サービス登録・起動
+  service:
+    name=jenkins
+    state=started
+    enabled=true
+  tags:
+    - jenkins

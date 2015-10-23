@@ -1,0 +1,11 @@
+---
+- name: インストール
+  yum:
+    name={{ item }}
+    enablerepo=epel
+    state=latest
+  with_items:
+    - nodejs
+    - npm
+  tags:
+    - nodejs

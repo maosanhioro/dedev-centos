@@ -1,0 +1,23 @@
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Ansible
+dedev.yml
+
+# Packer
+packer/box/*
+!.gitkeep
+packer/iso/*
+!.gitkeep
+packer_cache/
+
+# Sequel Pro
+*.spf
+
+# Vagrant
+.env
+.vagrant/
+vagrant/*
+!.gitkeep

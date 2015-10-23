@@ -1,0 +1,14 @@
+---
+- name: LAMP環境を構築
+  gather_facts: no
+  hosts: vagrant
+  sudo: yes
+
+  vars_files:
+    - dedev.yml
+
+  roles:
+    - common
+    - common/user
+    - middleware/ntp
+    - application/phpmyadmin

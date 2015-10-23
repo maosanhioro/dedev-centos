@@ -1,0 +1,4 @@
+---
+dependencies:
+  - { role: middleware/mysql }
+  - { role: middleware/php }

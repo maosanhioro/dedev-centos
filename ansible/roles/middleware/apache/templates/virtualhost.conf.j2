@@ -1,0 +1,9 @@
+<VirtualHost *:80>
+    ServerName {{ item.value.domain }}
+    ServerAdmin webmaster@{{ item.value.domain }}
+    DocumentRoot {{ item.value.docroot }}
+    ErrorLog logs/{{ item.value.domain }}-error_log
+    CustomLog logs/{{ item.value.domain }}-access_log combined
+    LogLevel warn
+</VirtualHost>
+

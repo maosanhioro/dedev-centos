@@ -1,0 +1,7 @@
+---
+- name: cpanmインストール
+  shell:
+    /usr/bin/curl -L http://cpanmin.us | /usr/bin/perl - --sudo App::cpanminus
+  tags:
+    - perl
+

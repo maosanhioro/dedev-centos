@@ -1,0 +1,46 @@
+- name: インストール
+  pip:
+    name={{ item }}
+    state=present
+  with_items:
+    - supervisor
+  tags:
+    - supervisor
+
+- name: 起動ファイル生成
+  shell:
+    echo_supervisord_conf > /etc/supervisord.conf;
+    echo "[include]" >> /etc/supervisord.conf;
+    echo "files = /etc/supervisor.d/*.conf" >> /etc/supervisord.conf
+  tags:
+    - supervisor
+
+- name: 起動ファイル設置先を確保
+  file:
+    state=directory
+    path={{ item.path }}
+  with_items:
+    - { path: '/etc/supervisor.d' }
+  tags:
+    - supervisor
+
+- name: Upstartファイルを配置
+  copy:
+    src=supervisord.conf
+    dest=/etc/init/supervisord.conf
+    mode=644
+    backup=yes
+  notify:
+    - restart-supervisord
+  tags:
+    - supervisor
+
+- name: サービス登録・起動
+  service:
+    name=supervisord
+    state=started
+    enabled=yes
+  notify:
+    - restart-supervisord
+  tags:
+    - supervisor

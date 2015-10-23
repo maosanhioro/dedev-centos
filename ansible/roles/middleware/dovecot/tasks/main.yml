@@ -1,0 +1,63 @@
+---
+- name: インストール
+  yum:
+    name={{ item }}
+    state=present
+  with_items:
+    - dovecot
+  tags:
+    - dovecot
+
+- name: ユーザ作成
+  user:
+    name=mailwall
+    password=$6$rounds=656000$MAaz9jU7bSZNftmv$LdBMyk1jdKBDhACM0UtGBfYAQR2RvxDT8ae.q0EBDL.LYirOmyHSYQas6zoV1WZ7VCKZURVIVzG/GOdVhQokI0
+    shell=/bin/false
+  tags:
+    - dovecot
+
+- name: dovecot.conf配置
+  copy:
+    src=dovecot.conf
+    dest=/etc/dovecot/dovecot.conf
+    mode=644
+    backup=yes
+  tags:
+    - dovecot
+
+- name: 10-auth.conf配置
+  copy:
+    src=10-auth.conf
+    dest=/etc/dovecot/conf.d/10-auth.conf
+    mode=644
+    backup=yes
+  tags:
+    - dovecot
+
+- name: 10-mail.conf配置
+  copy:
+    src=10-mail.conf
+    dest=/etc/dovecot/conf.d/10-mail.conf
+    mode=644
+    backup=yes
+  tags:
+    - dovecot
+
+- name: 受信ディレクトリ作成
+  file:
+    state=directory
+    path=/home/mailwall/mail/.imap/INBOX
+    owner=mailwall
+    group=mailwall
+  tags:
+    - dovecot
+
+- name: サービス登録・起動
+  service:
+    name=dovecot
+    state=started
+    enabled=yes
+  notify:
+    - restart-dovecot
+  tags:
+    - dovecot

@@ -1,0 +1,6 @@
+---
+- name: JDKインストール
+  yum:
+    name=java
+    state=present
+  tags: java

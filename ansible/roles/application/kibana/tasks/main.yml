@@ -1,0 +1,16 @@
+---
+- name: ダウンロード
+  get_url:
+    url=https://download.elasticsearch.org/kibana/kibana/kibana-4.0.1-linux-x64.tar.gz
+    dest=/home/{{ user }}/src/kibana-4.0.1-linux-x64.tar.gz
+    force=yes
+  tags:
+    - kibana
+
+- name: インストール
+  unarchive:
+    src=/home/{{ user }}/src/kibana-4.0.1-linux-x64.tar.gz
+    dest=/home/{{ user }}/src
+    copy=no
+  tags:
+    - kibana

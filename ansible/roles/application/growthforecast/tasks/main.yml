@@ -1,0 +1,49 @@
+---
+- name: 必要パッケージインストール
+  yum:
+    name={{ item }}
+    state=latest
+  with_items:
+    - "@DevelopmentTools"
+    - pkgconfig
+    - glib2-devel
+    - gettext
+    - libxml2-devel
+    - pango-devel
+    - cairo-devel
+    - perl-devel
+    - perl-ExtUtils-MakeMaker
+  tags:
+    - growthforecast
+
+- name: GrowthForecastインストール
+  shell:
+    /usr/local/bin/cpanm -n GrowthForecast
+  tags:
+    - growthforecast
+
+- name: データ設置先を確保
+  file:
+    state=directory
+    path={{ item.path }}
+  with_items:
+    - { path: '/home/{{ user }}/data/growthforecast' }
+  tags:
+    - growthforecast
+
+- name: 起動ファイルを配置
+  copy:
+    src=growthforecast.conf
+    dest=/etc/supervisor.d/growthforecast.conf
+    mode=644
+  notify:
+    - restart-supervisord
+  tags:
+    - growthforecast
+
+- name: サービス登録・起動
+  supervisorctl:
+    name=growthforecast
+    state=started
+  tags:
+    - growthforecast

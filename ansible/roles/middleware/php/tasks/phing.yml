@@ -1,0 +1,49 @@
+---
+- name: composer | globalにphingをインストール Phing - PHPビルドツール
+  sudo: no
+  shell:
+    /usr/local/bin/composer global require 'phing/phing=*'
+  tags:
+    - phing
+
+- name: composer | globalにphpcsをインストール PHP_CodeSniffer - コーディング規約違反検出＆最適化
+  sudo: no
+  shell:
+    composer global require "squizlabs/php_codesniffer=*"
+  tags:
+    - phing
+
+- name: composer | globalにphpcpdをインストール PHP Copy Paste Detector - コード重複検出＆最適化
+  sudo: no
+  shell:
+    composer global require 'sebastian/phpcpd=*'
+  tags:
+    - phing
+
+- name: composer | globalにphpdocumentorをインストール phpDocumentor - ドキュメント生成
+  sudo: no
+  shell:
+    composer global require 'phpdocumentor/phpdocumentor=*'
+  tags:
+    - phing
+
+- name: composer | globalにphplocをインストール PHPLOC - LOC, CLOC, NCLOC, LLOC計測
+  sudo: no
+  shell:
+    composer global require 'phploc/phploc=*'
+  tags:
+    - phing
+
+- name: composer | globalにphpmdをインストール PHP Mess Detector - 静的コード解析＆検出（PHP_Depend依存）
+  sudo: no
+  shell:
+    composer global require "phpmd/phpmd=*"
+  tags:
+    - phing
+
+- name: composer | globalにphpunitをインストール PHPUnit - ユニットテスト
+  sudo: no
+  shell:
+    composer global require 'phpunit/phpunit=*'
+  tags:
+    - phing

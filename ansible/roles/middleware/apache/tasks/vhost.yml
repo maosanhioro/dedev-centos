@@ -1,0 +1,41 @@
+---
+- name: virtualhost | 設定ファイルを配置
+  template:
+    src=virtualhost.conf.j2
+    dest=/etc/httpd/conf.d/vhost-{{ item.key }}.conf
+    mode=0644
+  with_dict:
+    "{{vhosts}}"
+  notify:
+    - restart-httpd
+  tags:
+    - apache
+    - vhost
+
+- name: virtualhost | documentrootのディレクトリ用意
+  file:
+    state=directory
+    path={{ item.value.basedir }}
+    mode=755
+    owner={{ user }}
+    group={{ user }}
+  with_dict:
+    "{{ vhosts }}"
+  tags:
+    - apache
+    - vhost
+
+- name: virtualhost | 有効化
+  replace:
+    regexp="{{ item.regexp }}"
+    replace="{{ item.replace }}"
+    dest=/etc/httpd/conf/httpd.conf
+    backup=yes
+  with_items:
+    - { regexp: '^#NameVirtualHost', replace: 'NameVirtualHost' }
+  notify:
+    - restart-httpd
+  tags:
+    - apache
+    - vhost
+

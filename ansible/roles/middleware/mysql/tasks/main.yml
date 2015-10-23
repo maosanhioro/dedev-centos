@@ -1,0 +1,41 @@
+---
+- name: インストール
+  yum:
+    name={{ item }}
+    enablerepo=remi
+    state=present
+  with_items:
+    - mysql-server
+    - mysql
+    - mysql-devel
+  tags:
+    - mysql
+
+#- name: rootユーザのパスワード設定
+#  mysql_user:
+#    name=root
+#    password=root
+#    priv=*.*:ALL
+#    state=present
+#  tags:
+#    - mysql
+
+- name: ログ格納ディレクトリを作成
+  file:
+    state=directory
+    path=/var/log/mysql
+    mode=755
+    owner=mysql
+    group=mysql
+  tags:
+    - mysql
+
+- name: サービス登録・起動
+  service:
+    name=mysqld
+    state=started
+    enabled=yes
+  notify:
+    - restart-mysqld
+  tags:
+    - mysql

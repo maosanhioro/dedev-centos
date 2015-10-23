@@ -1,0 +1,12 @@
+---
+- name: インストール
+  npm:
+    name={{ item }}
+    global=yes
+    state=latest
+  with_items:
+    - yo
+    - generator-hubot
+    - pm2
+  tags:
+    - hubot

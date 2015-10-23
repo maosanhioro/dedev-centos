@@ -1,0 +1,42 @@
+---
+- name: mod_userdir 有効化
+  replace:
+    regexp="{{ item.regexp }}"
+    replace="{{ item.replace }}"
+    dest=/etc/httpd/conf/httpd.conf
+    backup=yes
+  with_items:
+    - { regexp: '^    UserDir disabled', replace: '#    UserDir disabled' }
+  notify: restart-httpd
+  tags:
+    - mod_userdir
+
+- name: mod_userdir confファイルを配置
+  copy:
+    src=userdir.conf
+    dest=/etc/httpd/conf.d/userdir.conf
+    mode=644
+  notify:
+    - restart-httpd
+  tags:
+    - mod_userdir
+
+- name: mod_userdir ディレクトリ作成
+  file:
+    path=/home/{{ user }}/public_html
+    state=directory
+    mode=755
+    owner={{ user }}
+    group={{ user }}
+  tags:
+    - mod_userdir
+
+- name: mod_userdir サンプルHTML配置
+  copy:
+    src=index.html
+    dest=/home/{{ user }}/public_html/index.html
+    mode=644
+    owner={{ user }}
+    group={{ user }}
+  tags:
+    - mod_userdir

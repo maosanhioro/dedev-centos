@@ -1,0 +1,46 @@
+---
+- yum:
+    name=http://ftp.jaist.ac.jp/pub/Linux/Fedora/epel/6/x86_64/epel-release-6-8.noarch.rpm
+- yum:
+    name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+
+- name: 全パッケージをupdate
+  yum:
+    name=*
+    enablerepo=epel,remi,remi-php55
+    state=latest
+
+- name: IPv6無効に設定
+  sysctl:
+    name={{ item.name }}
+    value={{ item.value }}
+    state=present
+    reload=yes
+    ignoreerrors=yes
+  with_items:
+    - { name: 'net.ipv6.conf.all.disable_ipv6', value: 1 }
+    - { name: 'net.ipv6.conf.default.disable_ipv6', value: 1 }
+
+- name: 最低限パッケージをインストール
+  yum:
+    name={{ item }}
+    state=latest
+  with_items:
+    - autoconf
+    - automake
+    - curl
+    - gcc
+    - git
+    - kernel-devel
+    - make
+    - mlocate
+    - unzip
+    - wget
+    - yum-utils
+
+- name: 最低限（epel）パッケージをインストール
+  yum:
+    name=libmcrypt
+    enablerepo=epel
+    state=latest
+

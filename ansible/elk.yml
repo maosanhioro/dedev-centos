@@ -1,0 +1,14 @@
+---
+- name: Build Elasticsearch + Logstash + Kibana
+  gather_facts: no
+  hosts: vagrant
+  sudo: yes
+
+  roles:
+    - common
+    - common/user
+    - middleware/ntp
+    - middleware/java
+    - application/elasticsearch
+    - application/logstash
+    - application/kibana

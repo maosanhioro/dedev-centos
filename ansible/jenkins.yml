@@ -1,0 +1,12 @@
+---
+- name: Jenkins構築
+  gather_facts: no
+  hosts: vagrant
+  sudo: yes
+
+  roles:
+    - common
+    - common/user
+    - middleware/ntp
+    - middleware/java
+    - application/jenkins

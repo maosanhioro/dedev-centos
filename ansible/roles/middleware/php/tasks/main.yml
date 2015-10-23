@@ -1,0 +1,36 @@
+---
+- name: インストール
+  yum:
+    name={{ item }}
+    enablerepo=remi,remi-php55
+    state=present
+  with_items:
+    - php
+    - php-cli
+    - php-common
+    - php-devel
+    - php-gd
+    - php-mbstring
+    - php-mcrypt
+    - php-mysqlnd
+    - php-opcache
+    - php-pecl-apcu
+    - php-pecl-xdebug
+    - php-pdo
+    - php-process
+    - xhprof
+  tags:
+    - php
+
+- name: phpinfo.php配置
+  copy:
+    src=phpinfo.php
+    dest=/var/www/html/phpinfo.php
+    owner={{ user }}
+    group={{ user }}
+    mode=0644
+  tags:
+    - php
+
+- include: composer.yml
+#- include: phing.yml

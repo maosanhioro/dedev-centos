@@ -1,0 +1,23 @@
+---
+- name: ダウンロード
+  get_url:
+    url=https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.5.0.noarch.rpm
+    dest=/home/{{ user }}/src/elasticsearch-1.5.0.noarch.rpm
+    force=yes
+  tags:
+    - elasticsearch
+
+- name: インストール
+  yum:
+    name=/home/{{ user }}/src/elasticsearch-1.5.0.noarch.rpm
+    state=installed
+  tags:
+    - elasticsearch
+
+- name: サービス登録・起動
+  service:
+    name=elasticsearch
+    state=started
+    enabled=true
+  tags:
+    - elasticsearch

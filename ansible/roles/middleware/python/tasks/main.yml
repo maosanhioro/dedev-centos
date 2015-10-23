@@ -1,0 +1,14 @@
+---
+- name: easy_installインストール
+  shell:
+    /usr/bin/wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | sudo /usr/bin/python
+  tags:
+    - python
+
+- name: pipインストール
+  easy_install:
+    name={{ item }}
+  with_items:
+    - pip
+  tags:
+    - python

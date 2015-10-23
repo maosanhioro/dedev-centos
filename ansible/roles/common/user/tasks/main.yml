@@ -1,0 +1,12 @@
+---
+- name: $HOME以下を初期化
+  file:
+    state=directory
+    path={{ item.path }}
+    mode={{ item.mode }}
+    owner={{ user }}
+    group={{ user }}
+  with_items:
+    - { path: '/home/{{ user }}/', mode: '711' }
+    - { path: '/home/{{ user }}/bin', mode: '755' }
+    - { path: '/home/{{ user }}/src', mode: '755' }

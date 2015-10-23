@@ -1,0 +1,19 @@
+---
+- name: インストール
+  yum:
+    name=phpMyAdmin
+    enablerepo=remi,remi-php55
+    state=present
+  tags:
+    - phpmyadmin
+
+- name: ホストからアクセスできるよう強制修正
+  replace:
+    regexp='^     Allow from 127.0.0.1'
+    replace='     Allow from All'
+    dest=/etc/httpd/conf.d/phpMyAdmin.conf
+    backup=yes
+  notify:
+    - restart-httpd
+  tags:
+    - phpmyadmin
