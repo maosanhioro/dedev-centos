@@ -77,7 +77,7 @@ DEFAULT_SYNCED_OPTIONS  = 'dmode=775,fmode=664'
 ## 2. 起動
 
 ```bash
-$ vagrant up centos
+$ vagrant up
 $ vagrant ssh-config >> $HOME/.ssh/config
 ```
 
