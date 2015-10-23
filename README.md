@@ -215,16 +215,6 @@ $ ansible-playbook elk.yml
 
 ---
 ## Note&Tips
-### AnsibleでCurlが失敗するとき
-
-```bash
-# パブリックDNSにして暫定回避
-$ vagrant ssh
-$ sudo vi /etc/resolv.conf
-nameserver 8.8.8.8
-nameserver 8.8.4.4
-```
-
 ### root@MySQLのパスワード設定
 
 ```bash
