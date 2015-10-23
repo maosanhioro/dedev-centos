@@ -49,6 +49,7 @@ $ brew install packer
 
 ```bash
 $ cd packer
+$ packer build centos65.json # CentOS 6.5
 $ packer build centos67.json # CentOS 6.7
 ```
 
