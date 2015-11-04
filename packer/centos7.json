@@ -31,7 +31,7 @@
       "ssh_password": "{{ user `ssh_password` }}",
       "ssh_username": "{{ user `ssh_username` }}",
       "ssh_wait_timeout": "10000s",
-      "ssh_pty": "true",
+      "ssh_pty": true,
       "type": "virtualbox-iso",
       "vboxmanage": [
         [
