@@ -1,1 +1,1 @@
-/(?!^root$|^mailwall$)^.*$/ mailwall
+/(?!^root$|^vagrant$)^.*$/ vagrant

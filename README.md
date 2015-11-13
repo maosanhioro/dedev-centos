@@ -145,18 +145,14 @@ $ sudo vi /private/etc/hosts
 
 ---
 
-## MailWall (Inside mail server)
-* 簡易メールサーバを仮想マシン内に構築
-* From/Toに関わらずすべて閉じ込めたなかで処理する
-* WebメーラーにRainloopを採用
+## WebMail
+* Postfix/Dovecotで簡易メールサーバを構築
+* RainloopでWebメーラー構築
+* SMTPがlocalhost:25を指す場合は外部へ送信しない、Webメーラーで受信確認
 
+### Usage
 ```bash
-$ ansible-playbook mailwall.yml
-```
-
-### VirtualHost
-#### Apache Settings on Guest
-```bash
+# バーチャルホスト定義に追加
 $ vi dedev.yml
 ---
 vhosts:
@@ -165,33 +161,38 @@ vhosts:
     basedir: /var/www/html
     docroot: /var/www/html
   rainloop:
-    domain: rainloop.vm
-    basedir: /var/www/rainloop.vm
-    docroot: /var/www/rainloop.vm
-```
+    domain: rainloop.dedev.vm
+    basedir: /var/www/rainloop.dedev.vm
+    docroot: /var/www/rainloop.dedev.vm
 
-#### /etc/hosts Settings on Host
-```bash
+# Ansible実行
+$ ansible-playbook webmail.yml
+
+# /etc/hostsに追記
 $ sudo vi /private/etc/hosts
-192.168.33.10 dedev.vm rainloop.vm
+192.168.33.10 dedev.vm rainloop.dedev.vm
 ```
 
 ### Access & URL
-* http://rainloop.vm/?admin
+* http://rainloop.dedev.vm/?admin
     * 初期認証: admin / 12345
-* http://rainloop.vm/
-    * 初期認証: mailwall / mailwall
+* http://rainloop.dedev.vm/
+    * 初期認証: vagrant / vagrant
 
 ### 初期設定
 * Domainに`Add Domain`して新規ドメイン登録
-* IMAP/SMTP共に
-    * Serverは`localhost`
-    * Secureは`None`
+* Nameは`localhost`
+* IMAP
+    * Server: `localhost`
+    * Port:   143
+    * Secure: `None`
     * `Use short login`にチェック
-* Portは
-    * IMAP 143
-    * SMTP 25
-* SMTPの`Use authentication`のチェックを外す
+* SMTP
+    * Server: `localhost`
+    * Port:   25
+    * Secure: `None`
+    * `Use short login`にチェック
+    * `Use authentication`のチェックを外す　または　`Use php mail() function (beta)`にチェック
 
 ---
 
