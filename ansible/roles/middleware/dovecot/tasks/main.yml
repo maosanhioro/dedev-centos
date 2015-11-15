@@ -8,47 +8,51 @@
   tags:
     - dovecot
 
-- name: ユーザ作成
-  user:
-    name=mailwall
-    password=$6$rounds=656000$MAaz9jU7bSZNftmv$LdBMyk1jdKBDhACM0UtGBfYAQR2RvxDT8ae.q0EBDL.LYirOmyHSYQas6zoV1WZ7VCKZURVIVzG/GOdVhQokI0
-    shell=/bin/false
-  tags:
-    - dovecot
-
-- name: dovecot.conf配置
-  copy:
-    src=dovecot.conf
+- name: dovecot.conf protocols修正
+  replace:
     dest=/etc/dovecot/dovecot.conf
-    mode=644
-    backup=yes
+    regexp='^#protocols = imap pop3 lmtp$'
+    replace='protocols = imap'
+  notify:
+    - restart-dovecot
   tags:
     - dovecot
 
-- name: 10-auth.conf配置
-  copy:
-    src=10-auth.conf
+- name: 10-auth.conf auth修正
+  replace:
     dest=/etc/dovecot/conf.d/10-auth.conf
-    mode=644
-    backup=yes
+    regexp="{{ item.regexp }}"
+    replace="{{ item.replace }}"
+  with_items:
+    - {
+        regexp:  '^#disable_plaintext_auth = yes$',
+        replace: 'disable_plaintext_auth = no'
+      }
+    - {
+        regexp:  '^auth_mechanisms = plain$',
+        replace: '#auth_mechanisms = plain'
+      }
+  notify:
+    - restart-dovecot
   tags:
     - dovecot
 
-- name: 10-mail.conf配置
-  copy:
-    src=10-mail.conf
+- name: 10-mail.conf mail_location修正
+  replace:
     dest=/etc/dovecot/conf.d/10-mail.conf
-    mode=644
-    backup=yes
+    regexp='^#mail_location = $'
+    replace='mail_location = mbox:~/mail:INBOX=/var/mail/%u'
+  notify:
+    - restart-dovecot
   tags:
     - dovecot
 
 - name: 受信ディレクトリ作成
   file:
     state=directory
-    path=/home/mailwall/mail/.imap/INBOX
-    owner=mailwall
-    group=mailwall
+    path=/home/{{ user }}/mail/.imap/INBOX
+    owner={{ user }}
+    group={{ user }}
   tags:
     - dovecot
 

@@ -9,6 +9,14 @@
   tags:
     - postfix
 
+- name: ユーザにサブグループを追加
+  user:
+    name={{ user }}
+    groups=mail
+    append=yes
+  tags:
+    - postfix
+
 - name: aliases.regexp配置
   copy:
     src=aliases.regexp
@@ -18,12 +26,20 @@
   tags:
     - postfix
 
-- name: main.cf配置
-  copy:
-    src=main.cf
+- name: main.cf alias_maps, inet_interfacesを修正
+  replace:
     dest=/etc/postfix/main.cf
-    mode=644
-    backup=yes
+    regexp="{{ item.regexp }}"
+    replace="{{ item.replace }}"
+  with_items:
+    - {
+        regexp:  '^alias_maps = hash:/etc/aliases$',
+        replace: 'alias_maps = hash:/etc/aliases, pcre:/etc/aliases.regexp'
+      }
+    - {
+        regexp:  '^inet_protocols = all$',
+        replace: 'inet_protocols = ipv4'
+      }
   tags:
     - postfix
 
@@ -33,6 +49,14 @@
     dest=/etc/postfix/transport_maps
     mode=644
     backup=yes
+  tags:
+    - postfix
+
+- name: transport_mapsを設定に追記
+  lineinfile:
+    dest=/etc/postfix/main.cf
+    state=present
+    line='transport_maps = pcre:/etc/postfix/transport_maps'
   tags:
     - postfix
 

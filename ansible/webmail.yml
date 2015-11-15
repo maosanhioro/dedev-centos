@@ -1,5 +1,5 @@
 ---
-- name: MailWall構築
+- name: WebMail構築
   gather_facts: no
   hosts: vagrant
   sudo: yes
@@ -11,6 +11,4 @@
     - common
     - common/user
     - middleware/ntp
-    - middleware/postfix
-    - middleware/dovecot
     - application/rainloop
