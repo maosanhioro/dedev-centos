@@ -14,11 +14,19 @@
     regexp="{{ item.regexp }}"
     replace="{{ item.replace }}"
     dest=/etc/httpd/conf/httpd.conf
-    backup=yes
   with_items:
-    - { regexp: '^#EnableMMAP off', replace: 'EnableMMAP off' }
-    - { regexp: '^#EnableSendfile off', replace: 'EnableSendfile off' }
-    - { regexp: '^    AllowOverride None', replace: '    AllowOverride All' }
+    - {
+        regexp: '^#EnableMMAP off',
+        replace: 'EnableMMAP off'
+      }
+    - {
+        regexp: '^#EnableSendfile off',
+        replace: 'EnableSendfile off'
+      }
+    - {
+        regexp: '^    AllowOverride None',
+        replace: '    AllowOverride All'
+      }
   notify:
     - restart-httpd
   tags:

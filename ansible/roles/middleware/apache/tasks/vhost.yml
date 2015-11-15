@@ -27,12 +27,14 @@
 
 - name: virtualhost | 有効化
   replace:
+    dest=/etc/httpd/conf/httpd.conf
     regexp="{{ item.regexp }}"
     replace="{{ item.replace }}"
-    dest=/etc/httpd/conf/httpd.conf
-    backup=yes
   with_items:
-    - { regexp: '^#NameVirtualHost', replace: 'NameVirtualHost' }
+    - {
+        regexp: '^#NameVirtualHost',
+        replace: 'NameVirtualHost'
+      }
   notify:
     - restart-httpd
   tags:

@@ -9,10 +9,9 @@
 
 - name: ホストからアクセスできるよう強制修正
   replace:
+    dest=/etc/httpd/conf.d/phpMyAdmin.conf
     regexp='^     Allow from 127.0.0.1'
     replace='     Allow from All'
-    dest=/etc/httpd/conf.d/phpMyAdmin.conf
-    backup=yes
   notify:
     - restart-httpd
   tags:
